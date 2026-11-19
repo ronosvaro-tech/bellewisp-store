@@ -12,9 +12,9 @@ const CHECKOUT_LINKS = {
 // statement name DOLLARIMDOT): shipping address on, auto-return to /thank-you.html.
 
 const BUNDLES = {
-  "1kit": { label: "1 kit", price: "$29.95", value: 29.95 },
-  "2kit": { label: "2 kits", price: "$44.95", value: 44.95 },
-  "3kit": { label: "3 kits", price: "$59.95", value: 59.95 },
+  "1kit": { label: "1 kit", price: "$29.95", value: 29.95, kits: 1 },
+  "2kit": { label: "2 kits", price: "$44.95", value: 44.95, kits: 2 },
+  "3kit": { label: "3 kits", price: "$59.95", value: 59.95, kits: 3 },
 };
 const STYLE_NAMES = { "30D": "Natural 30D", "40D": "Fluffy 40D", "50D": "Dramatic 50D" };
 
@@ -69,9 +69,14 @@ function goCheckout(sku) {
   try {
     localStorage.setItem("bw_pending", JSON.stringify({ sku, style: selectedStyle, value: b.value, ts: Date.now() }));
   } catch (_) {}
-  if (window.fbq) fbq("track", "InitiateCheckout", { value: b.value, currency: "USD", content_name: sku + " " + selectedStyle });
   if (!link) { alert("Checkout is being set up — please check back shortly."); return; }
-  location.href = link;
+  if (window.fbq) fbq("track", "InitiateCheckout", { value: b.value, currency: "USD", content_name: sku + " " + selectedStyle, content_ids: [sku], content_type: "product", num_items: b.kits || 1 });
+  if (window.clarity) clarity("event", "checkout_click");
+  // OxiRenew lesson (18.11): leaving the page instantly can drop the pixel request
+  // (0 IC with real clicks). Give the event ~400ms to go out, then redirect.
+  const btns = document.querySelectorAll("#checkout-btn, #sticky-btn, .up-opt, #up-no");
+  btns.forEach((x) => { x.disabled = true; });
+  setTimeout(() => { location.href = link; }, 400);
 }
 
 function startCheckout() {
@@ -98,6 +103,10 @@ function startCheckout() {
 document.getElementById("checkout-btn").addEventListener("click", startCheckout);
 // Sticky bar checks out directly with the current choice (OxiRenew mobile lesson, 18.11).
 document.getElementById("sticky-btn").addEventListener("click", startCheckout);
+// Back button from PayPal (bfcache): re-enable the checkout buttons.
+window.addEventListener("pageshow", () => {
+  document.querySelectorAll("#checkout-btn, #sticky-btn, .up-opt, #up-no").forEach((x) => { x.disabled = false; });
+});
 
 // ---- reviews (real verified-buyer reviews of this exact kit from AliExpress, see assets/reviews.json) ----
 const PAGE = 9;
