@@ -5,18 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Order Confirmed | Bellewisp</title>
 <meta name="robots" content="noindex">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=1">
+<meta name="theme-color" content="#111111">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23111111'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='%23C9AE7E' font-family='Georgia,serif'%3EB%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=2">
 <style>
-.ty{max-width:560px;margin:0 auto;padding:44px 20px 60px;text-align:center}
-.ty .ok{width:72px;height:72px;border-radius:50%;background:#E8F7EE;color:#16A34A;font-size:38px;line-height:72px;margin:0 auto 18px}
-.ty p{color:var(--gray)}
-.ty .box{text-align:left;background:var(--bg-soft);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:22px 0}
+.ty{max-width:580px;margin:0 auto;padding:52px 24px 72px;text-align:center}
+.ty .logo{display:inline-block;margin-bottom:34px}
+.ty .ok{width:72px;height:72px;border-radius:50%;border:1px solid var(--gold);color:var(--ink);font-family:var(--serif);font-size:34px;line-height:72px;margin:0 auto 22px}
+.ty h1{font-size:40px}
+.ty p{color:var(--muted)}
+.ty .box{text-align:left;background:var(--ivory);border:1px solid var(--line);padding:24px 24px;margin:26px 0}
+.ty .box > b{font-family:var(--serif);font-size:22px;font-weight:500}
 .ty .box li{margin-bottom:8px}
-.ty input,.ty textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;margin-bottom:8px}
+.ty input,.ty textarea{width:100%;border:1px solid var(--line);border-radius:2px;padding:11px 12px;font:inherit;font-size:16px;margin-bottom:8px;background:#fff}
 </style>
 <script>
-window.META_PIXEL_ID = "";
+window.META_PIXEL_ID = "3584146345123169";
 if (window.META_PIXEL_ID) {
   !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
   n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
@@ -39,26 +46,26 @@ if (window.META_PIXEL_ID) {
 </head>
 <body>
 <div class="ty">
-  <div class="logo" style="margin-bottom:24px">Belle<span>wisp</span></div>
+  <a class="logo" href="index.html">Bellewisp</a>
   <div class="ok">✓</div>
-  <h1 style="font-size:30px">Thank you — your order is in!</h1>
-  <p>You'll get a PayPal receipt by email. We ship within 1–3 business days and send tracking as soon as it's on its way.</p>
+  <h1>Thank you — your order is in.</h1>
+  <p>You'll get a PayPal receipt by email. Each kit is packed in our signature Bellewisp box and dispatched within 5&#8288;–&#8288;10 business days; we'll email your tracking number as soon as it's on its way. US delivery typically takes 5&#8288;–&#8288;10 business days after dispatch.</p>
 
   <div class="box">
     <b>Your style</b>
-    <p style="margin:6px 0 10px" id="style-line">Confirm your lash style, or tell us how to split a multi-kit order (e.g. "1× Natural, 1× Dramatic").</p>
+    <p style="margin:6px 0 12px" id="style-line">Confirm your lash style, or tell us how to split a multi-kit order (e.g. "1× Natural, 1× Dramatic").</p>
     <form id="style-form">
       <input type="email" name="email" placeholder="Email used at checkout" required>
       <textarea name="style" rows="2" placeholder="Style(s)"></textarea>
       <input type="text" name="_honey" style="display:none">
-      <button class="cta-btn" type="submit" style="width:100%;padding:13px">Send</button>
-      <p id="style-done" style="display:none;color:#16A34A;font-weight:700">✓ Got it — thanks!</p>
+      <button class="cta-btn" type="submit" style="width:100%">Send</button>
+      <p id="style-done" style="display:none;color:var(--ink);font-weight:500;margin-top:10px">✓ Got it — thank you.</p>
     </form>
   </div>
 
   <div class="box">
     <b>Before your first set</b>
-    <ul style="margin:10px 0 0;padding-left:20px">
+    <ul style="margin:10px 0 0;padding-left:20px;color:var(--muted)">
       <li>Start with clean, oil-free lashes (no mascara).</li>
       <li>Place clusters <b>under</b> your natural lashes — start at the outer corner.</li>
       <li>Thin layer of bond, press, then seal.</li>
@@ -73,13 +80,15 @@ if (window.META_PIXEL_ID) {
   var p = null; try { p = JSON.parse(localStorage.getItem('bw_pending') || 'null'); } catch (e) {}
   var names = { "30D": "Natural 30D", "40D": "Fluffy 40D", "50D": "Dramatic 50D" };
   var f = document.getElementById('style-form');
-  if (p && p.style) f.style.value = (p.sku || '') + ' — ' + (names[p.style] || p.style);
+  // form.style is the CSS declaration, so reach the fields through form.elements
+  var styleField = f.elements['style'], emailField = f.elements['email'];
+  if (p && p.style) styleField.value = (p.sku || '') + ' — ' + (names[p.style] || p.style);
   f.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (f._honey.value) return;
+    if (f.elements['_honey'].value) return;
     fetch('https://formsubmit.co/ajax/ronosvaro@gmail.com', {
       method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({ email: f.email.value, style: f.style.value, _subject: 'Bellewisp order style', _captcha: 'false', _template: 'table' })
+      body: JSON.stringify({ email: emailField.value, style: styleField.value, _subject: 'Bellewisp order style', _captcha: 'false', _template: 'table' })
     }).then(function () { document.getElementById('style-done').style.display = 'block'; f.querySelector('button').disabled = true; });
   });
 })();
