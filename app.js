@@ -12,9 +12,9 @@ const CHECKOUT_LINKS = {
 // statement name DOLLARIMDOT): shipping address on, auto-return to /thank-you.html.
 
 const BUNDLES = {
-  "1kit": { label: "1 kit", price: "$29.95", value: 29.95, kits: 1 },
-  "2kit": { label: "2 kits", price: "$44.95", value: 44.95, kits: 2 },
-  "3kit": { label: "3 kits", price: "$59.95", value: 59.95, kits: 3 },
+  "1kit": { label: "1 kit", price: "$69", value: 69.00, kits: 1 },
+  "2kit": { label: "2 kits", price: "$109", value: 109.00, kits: 2 },
+  "3kit": { label: "3 kits", price: "$139", value: 139.00, kits: 3 },
 };
 const STYLE_NAMES = { "30D": "Natural 30D", "40D": "Fluffy 40D", "50D": "Dramatic 50D" };
 
@@ -49,14 +49,14 @@ const UPSELLS = {
   "1kit": {
     body: "A set lasts several days, so if you'll wear clusters every week you'll go through a kit fast. A second kit means you won't run out of clusters or bond — one order, one delivery.",
     options: [
-      { sku: "2kit", title: "2 Kits", note: "$22.48 per kit · save $14.95" },
-      { sku: "3kit", title: "3 Kits", note: "$19.98 per kit · save $29.90 · mix styles" },
+      { sku: "2kit", title: "2 Kits", note: "$54.50 per kit · save $29" },
+      { sku: "3kit", title: "3 Kits", note: "$46.33 per kit · save $68 · mix styles" },
     ],
     decline: "No thanks, 1 kit is enough",
   },
   "2kit": {
     body: "Want to try another density too? The 3-kit bundle is the lowest price per kit, and you can mix Natural, Fluffy and Dramatic.",
-    options: [{ sku: "3kit", title: "3 Kits", note: "$19.98 per kit · save $29.90" }],
+    options: [{ sku: "3kit", title: "3 Kits", note: "$46.33 per kit · save $68" }],
     decline: "No thanks, keep 2 kits",
   },
 };
