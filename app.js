@@ -79,12 +79,34 @@ function goCheckout(sku) {
   setTimeout(() => { location.href = link; }, 400);
 }
 
+// Upsell modal. Mobile lesson (Ronen 19.11): the phone's Back button must close the
+// popup, not leave the site. Opening pushes a history entry; Back (popstate) closes it.
+const upModal = document.getElementById("upsell");
+function openUpsell() {
+  upModal.hidden = false;
+  try { history.pushState({ bwUp: 1 }, ""); } catch (_) {}
+}
+function closeUpsell(viaBack) {
+  if (upModal.hidden) return;
+  upModal.hidden = true;
+  if (!viaBack && history.state && history.state.bwUp) { try { history.back(); } catch (_) {} }
+}
+window.addEventListener("popstate", () => closeUpsell(true));
+upModal.addEventListener("click", (e) => { if (e.target === upModal) closeUpsell(false); });
+document.getElementById("up-x").addEventListener("click", () => closeUpsell(false));
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeUpsell(false); });
+
+function leaveModalForCheckout() {
+  // Drop the pushed entry's marker so returning from PayPal doesn't need two Backs to reopen anything.
+  upModal.hidden = true;
+  try { if (history.state && history.state.bwUp) history.replaceState(null, ""); } catch (_) {}
+}
+
 function startCheckout() {
   const up = UPSELLS[selectedSku];
   if (!up || upsellShown) return goCheckout(selectedSku);
   upsellShown = true;
   try { sessionStorage.setItem("bw_up", "1"); } catch (_) {}
-  const modal = document.getElementById("upsell");
   document.getElementById("up-body").textContent = up.body;
   const opts = document.getElementById("up-opts");
   opts.innerHTML = "";
@@ -92,20 +114,26 @@ function startCheckout() {
     const btn = document.createElement("button");
     btn.type = "button"; btn.className = "up-opt";
     btn.innerHTML = `<span><b>${o.title}</b><small>${o.note}</small></span><span class="pr">${BUNDLES[o.sku].price}</span>`;
-    btn.addEventListener("click", () => { selectedSku = o.sku; modal.hidden = true; goCheckout(o.sku); });
+    btn.addEventListener("click", () => {
+      selectedSku = o.sku;
+      document.querySelectorAll(".bundle").forEach((x) => x.classList.toggle("selected", x.dataset.sku === o.sku));
+      updateSticky();
+      leaveModalForCheckout(); goCheckout(o.sku);
+    });
     opts.appendChild(btn);
   });
   const no = document.getElementById("up-no");
   no.textContent = up.decline;
-  no.onclick = () => { modal.hidden = true; goCheckout(selectedSku); };
-  modal.hidden = false;
+  no.onclick = () => { leaveModalForCheckout(); goCheckout(selectedSku); };
+  openUpsell();
 }
 document.getElementById("checkout-btn").addEventListener("click", startCheckout);
 // Sticky bar checks out directly with the current choice (OxiRenew mobile lesson, 18.11).
 document.getElementById("sticky-btn").addEventListener("click", startCheckout);
-// Back button from PayPal (bfcache): re-enable the checkout buttons.
+// Back from PayPal (bfcache): re-enable the checkout buttons and make sure the popup is closed.
 window.addEventListener("pageshow", () => {
   document.querySelectorAll("#checkout-btn, #sticky-btn, .up-opt, #up-no").forEach((x) => { x.disabled = false; });
+  upModal.hidden = true;
 });
 
 // ---- reviews (real verified-buyer reviews of this exact kit from AliExpress, see assets/reviews.json) ----
