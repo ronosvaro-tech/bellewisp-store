@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Order Confirmed | Bellewisp</title>
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=1">
+<style>
+.ty{max-width:560px;margin:0 auto;padding:44px 20px 60px;text-align:center}
+.ty .ok{width:72px;height:72px;border-radius:50%;background:#E8F7EE;color:#16A34A;font-size:38px;line-height:72px;margin:0 auto 18px}
+.ty p{color:var(--gray)}
+.ty .box{text-align:left;background:var(--bg-soft);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:22px 0}
+.ty .box li{margin-bottom:8px}
+.ty input,.ty textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;margin-bottom:8px}
+</style>
+<script>
+window.META_PIXEL_ID = "";
+if (window.META_PIXEL_ID) {
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', window.META_PIXEL_ID); fbq('track', 'PageView');
+  // Purchase: PayPal auto-returns here. Fire once, only for a checkout started in the last 3 hours.
+  (function () {
+    try {
+      var p = JSON.parse(localStorage.getItem('bw_pending') || 'null');
+      if (!p || !p.ts || Date.now() - p.ts > 3 * 3600 * 1000) return;
+      if (localStorage.getItem('bw_fired') === String(p.ts)) return;
+      fbq('track', 'Purchase', { value: p.value, currency: 'USD', content_name: p.sku + ' ' + p.style });
+      localStorage.setItem('bw_fired', String(p.ts));
+    } catch (e) {}
+  })();
+}
+</script>
+</head>
+<body>
+<div class="ty">
+  <div class="logo" style="margin-bottom:24px">Belle<span>wisp</span></div>
+  <div class="ok">✓</div>
+  <h1 style="font-size:30px">Thank you — your order is in!</h1>
+  <p>You'll get a PayPal receipt by email. We ship within 1–3 business days and send tracking as soon as it's on its way.</p>
+
+  <div class="box">
+    <b>Your style</b>
+    <p style="margin:6px 0 10px" id="style-line">Confirm your lash style, or tell us how to split a multi-kit order (e.g. "1× Natural, 1× Dramatic").</p>
+    <form id="style-form">
+      <input type="email" name="email" placeholder="Email used at checkout" required>
+      <textarea name="style" rows="2" placeholder="Style(s)"></textarea>
+      <input type="text" name="_honey" style="display:none">
+      <button class="cta-btn" type="submit" style="width:100%;padding:13px">Send</button>
+      <p id="style-done" style="display:none;color:#16A34A;font-weight:700">✓ Got it — thanks!</p>
+    </form>
+  </div>
+
+  <div class="box">
+    <b>Before your first set</b>
+    <ul style="margin:10px 0 0;padding-left:20px">
+      <li>Start with clean, oil-free lashes (no mascara).</li>
+      <li>Place clusters <b>under</b> your natural lashes — start at the outer corner.</li>
+      <li>Thin layer of bond, press, then seal.</li>
+      <li>Remove with an oil-based remover — never pull off dry.</li>
+      <li>Sensitive eyes? Patch-test 24 hours before.</li>
+    </ul>
+  </div>
+  <p style="font-size:14px">Questions? <a href="mailto:support@bellewisp.com">support@bellewisp.com</a> · <a href="index.html">Back to store</a></p>
+</div>
+<script>
+(function () {
+  var p = null; try { p = JSON.parse(localStorage.getItem('bw_pending') || 'null'); } catch (e) {}
+  var names = { "30D": "Natural 30D", "40D": "Fluffy 40D", "50D": "Dramatic 50D" };
+  var f = document.getElementById('style-form');
+  if (p && p.style) f.style.value = (p.sku || '') + ' — ' + (names[p.style] || p.style);
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (f._honey.value) return;
+    fetch('https://formsubmit.co/ajax/ronosvaro@gmail.com', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ email: f.email.value, style: f.style.value, _subject: 'Bellewisp order style', _captcha: 'false', _template: 'table' })
+    }).then(function () { document.getElementById('style-done').style.display = 'block'; f.querySelector('button').disabled = true; });
+  });
+})();
+</script>
+</body>
+</html>
