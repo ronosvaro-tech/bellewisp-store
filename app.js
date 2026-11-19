@@ -1,15 +1,15 @@
 // Bellewisp store logic
 // Checkout: PayPal hosted payment links (same setup as OxiRenew — works in the
 // Instagram/Facebook in-app browser, card form without a PayPal account).
-// Ronen creates one link per bundle in PayPal → Payment Links, with the return
-// URL set to https://<domain>/thank-you.html, and pastes them here.
 // Optional: per-style links, e.g. "2kit-40D". If a style-specific link is
 // missing, the bundle link is used and the style is collected on thank-you.
 const CHECKOUT_LINKS = {
-  "1kit": "",
-  "2kit": "",
-  "3kit": "",
+  "1kit": "https://www.paypal.com/ncp/payment/XAFCPS2M8TDQA",
+  "2kit": "https://www.paypal.com/ncp/payment/AGEFMELQDE336",
+  "3kit": "https://www.paypal.com/ncp/payment/8BUT87QJ5MVRN",
 };
+// Created 19.11.2026 in the same PayPal business account as OxiRenew ("Dollar IM Dot Com",
+// statement name DOLLARIMDOT): shipping address on, auto-return to /thank-you.html.
 
 const BUNDLES = {
   "1kit": { label: "1 kit", price: "$29.95", value: 29.95 },
