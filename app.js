@@ -63,6 +63,19 @@ const UPSELLS = {
 let upsellShown = false;
 try { upsellShown = sessionStorage.getItem("bw_up") === "1"; } catch (_) {}
 
+function sendPixelKeepalive(ev, data, eid) {
+  try {
+    const id = window.META_PIXEL_ID;
+    if (!id) return;
+    const q = new URLSearchParams({ id, ev, eid, dl: location.href, rl: document.referrer || "", ts: String(Date.now()), noscript: "1" });
+    Object.keys(data).forEach((k) => {
+      const v = data[k];
+      q.append("cd[" + k + "]", Array.isArray(v) ? JSON.stringify(v) : String(v));
+    });
+    fetch("https://www.facebook.com/tr/?" + q.toString(), { mode: "no-cors", keepalive: true, credentials: "include" }).catch(() => {});
+  } catch (_) {}
+}
+
 function goCheckout(sku) {
   const b = BUNDLES[sku];
   const link = CHECKOUT_LINKS[sku + "-" + selectedStyle] || CHECKOUT_LINKS[sku];
@@ -70,13 +83,17 @@ function goCheckout(sku) {
     localStorage.setItem("bw_pending", JSON.stringify({ sku, style: selectedStyle, value: b.value, ts: Date.now() }));
   } catch (_) {}
   if (!link) { alert("Checkout is being set up — please check back shortly."); return; }
-  if (window.fbq) fbq("track", "InitiateCheckout", { value: b.value, currency: "USD", content_name: sku + " " + selectedStyle, content_ids: [sku], content_type: "product", num_items: b.kits || 1 });
+  const icData = { value: b.value, currency: "USD", content_name: sku + " " + selectedStyle, content_ids: [sku], content_type: "product", num_items: b.kits || 1 };
+  const eid = "ic_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
+  if (window.fbq) fbq("track", "InitiateCheckout", icData, { eventID: eid });
+  // 20.11: the pixel showed 0 InitiateCheckout even with a 400ms delay (Clarity saw the click).
+  // The pixel's own request gets cancelled when the page leaves for PayPal, so also send the
+  // same event (same eventID → Meta deduplicates) with fetch keepalive, which survives navigation.
+  sendPixelKeepalive("InitiateCheckout", icData, eid);
   if (window.clarity) clarity("event", "checkout_click");
-  // OxiRenew lesson (18.11): leaving the page instantly can drop the pixel request
-  // (0 IC with real clicks). Give the event ~400ms to go out, then redirect.
   const btns = document.querySelectorAll("#checkout-btn, #sticky-btn, .up-opt, #up-no");
   btns.forEach((x) => { x.disabled = true; });
-  setTimeout(() => { location.href = link; }, 400);
+  setTimeout(() => { location.href = link; }, 700);
 }
 
 // Upsell modal. Mobile lesson (Ronen 19.11): the phone's Back button must close the
