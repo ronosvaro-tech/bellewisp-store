@@ -315,6 +315,11 @@ footer .disc{font-size:12px;color:#A39A8C;margin-top:18px;max-width:760px}
   .sticky-cta .p small{display:block;font-family:var(--sans);font-weight:400;color:var(--muted);font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .sticky-cta .cta-btn{padding:14px 20px;font-size:12px;flex:none}
   .oxc{bottom:84px;right:12px}.oxc-btn-label{display:none}.oxc-btn{padding:13px}
+  /* open chat on a phone: full-width sheet above everything, scrollable, so the keyboard never hides Send */
+  .oxc.open{left:8px;right:8px;bottom:8px;top:auto;z-index:300}
+  .oxc.open .oxc-panel{width:auto;max-width:none;max-height:calc(100dvh - 16px);display:flex;flex-direction:column}
+  .oxc.open .oxc-body{overflow-y:auto;-webkit-overflow-scrolling:touch}
+  html.oxc-lock .sticky-cta{display:none}
 }
 @media (max-width:560px){
   h1{font-size:38px} h2{font-size:30px}

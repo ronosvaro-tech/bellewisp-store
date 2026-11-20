@@ -50,45 +50,75 @@
     quick.appendChild(b);
   });
 
-  function setOpen(open) {
+  // phone Back button closes the chat instead of leaving the site
+  let pushed = false;
+  function setOpen(open, fromPop) {
     panel.hidden = !open;
     btn.setAttribute("aria-expanded", String(open));
     root.classList.toggle("open", open);
-    if (open) setTimeout(() => form.querySelector("input[type=email]").focus(), 50);
+    document.documentElement.classList.toggle("oxc-lock", open);
+    if (open) {
+      if (!pushed) { try { history.pushState({ oxc: 1 }, ""); pushed = true; } catch (_) {} }
+      // don't auto-focus on phones: the keyboard would cover the panel before it's seen
+      if (window.matchMedia("(min-width: 761px)").matches) setTimeout(() => form.querySelector("input[type=email]").focus(), 50);
+    } else if (pushed) {
+      pushed = false;
+      if (!fromPop) { try { history.back(); } catch (_) {} }
+    }
   }
+  window.addEventListener("popstate", () => { if (!panel.hidden) setOpen(false, true); else pushed = false; });
   btn.addEventListener("click", () => setOpen(panel.hidden));
   root.querySelector(".oxc-x").addEventListener("click", () => setOpen(false));
+  // keep the focused field visible above the phone keyboard
+  form.addEventListener("focusin", (e) => setTimeout(() => e.target.scrollIntoView({ block: "center" }), 300));
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     err.hidden = true;
     const email = form.email.value.trim();
     const text = msg.value.trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = "Please enter a valid email so we can reply."; err.hidden = false; return; }
-    if (text.length < 3) { err.textContent = "Please type a message."; err.hidden = false; return; }
+    const showErr = (t) => { err.textContent = t; err.hidden = false; err.scrollIntoView({ block: "center" }); };
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr("Please enter your email so we can reply."); form.email.focus(); return; }
+    if (text.length < 2) { showErr("Please type a message."); msg.focus(); return; }
     if (form._honey.value) return;
     const send = form.querySelector(".oxc-send");
-    send.disabled = true; send.textContent = "Sending… (a few seconds)";
-    try {
-      const r = await fetch(ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          email, message: text,
-          page: location.pathname, _subject: "Bellewisp chat: " + text.slice(0, 50),
-          _template: "table", _captcha: "false",
-        }),
-      });
-      if (!r.ok) throw new Error("HTTP " + r.status);
-      const data = await r.json().catch(() => ({}));
-      if (String(data.success) !== "true") throw new Error(data.message || "not delivered");
+    send.disabled = true; send.textContent = "Sending…";
+    const fields = {
+      email, message: text,
+      page: location.pathname + location.search.replace(/[?&](fbclid|gclid)=[^&]*/g, ""),
+      _subject: "Bellewisp chat: " + text.slice(0, 50),
+      _template: "table", _captcha: "false",
+    };
+    const done = () => {
       form.hidden = true; quick.hidden = true;
       root.querySelector(".oxc-done").hidden = false;
       if (window.fbq) fbq("track", "Contact");
-    } catch (_) {
-      err.textContent = "Sorry, that didn't go through. Please try again in a moment.";
-      err.hidden = false;
-      send.disabled = false; send.textContent = "Send message";
+      if (window.clarity) clarity("event", "chat_sent");
+    };
+    try {
+      const ctl = new AbortController();
+      const timer = setTimeout(() => ctl.abort(), 12000);
+      const r = await fetch(ENDPOINT, {
+        method: "POST", signal: ctl.signal,
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(fields),
+      });
+      clearTimeout(timer);
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok || String(data.success) !== "true") throw new Error(data.message || "HTTP " + r.status);
+      done();
+    } catch (e1) {
+      // fallback for in-app browsers / blocked AJAX: a plain form post that the browser can't read back
+      try {
+        const fd = new URLSearchParams(fields);
+        await fetch(ENDPOINT.replace("/ajax/", "/"), { method: "POST", mode: "no-cors", body: fd });
+        if (window.clarity) clarity("event", "chat_fallback");
+        done();
+      } catch (e2) {
+        showErr("Sorry, that didn't go through. Please check your connection and try again.");
+        send.disabled = false; send.textContent = "Send message";
+        if (window.clarity) clarity("event", "chat_failed");
+      }
     }
   });
 })();
