@@ -62,6 +62,62 @@ header{border-bottom:1px solid var(--line);background:var(--white);position:rela
 .rating-pill{display:inline-flex;align-items:center;flex-wrap:wrap;gap:8px;border:1px solid var(--line);background:var(--white);border-radius:2px;padding:7px 14px;font-size:13px;color:var(--muted);margin-bottom:24px}
 .rating-pill b{color:var(--ink)}
 
+/* hero buy box (21.11): gallery + price + style + set + checkout above the fold */
+.pdp{background:var(--ivory);padding:40px 0 64px}
+.pdp-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:start}
+.gallery-wrap{position:sticky;top:16px;min-width:0}
+.gallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:var(--stone);aspect-ratio:4/5}
+.gallery::-webkit-scrollbar{display:none}
+.gallery figure{flex:0 0 100%;margin:0;scroll-snap-align:start;position:relative}
+.gallery img{width:100%;height:100%;object-fit:cover;object-position:50% 38%}
+.gallery figcaption{position:absolute;left:12px;bottom:12px;background:rgba(17,17,17,.72);color:var(--ivory);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px}
+.dots{display:flex;justify-content:center;gap:8px;margin-top:12px}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--line);cursor:pointer}
+.dots i.on{background:var(--ink)}
+.g-note{font-size:11.5px;color:var(--muted);text-align:center;margin:8px 0 0}
+.buybox h1{font-size:46px;margin:14px 0 10px}
+.buybox .rating-pill{text-decoration:none;margin:0}
+.pdp-price{font-family:var(--serif);font-size:34px;font-weight:500;line-height:1.1;margin-bottom:14px}
+.pdp-price small{font-family:var(--sans);font-size:13px;color:var(--muted);letter-spacing:.02em;margin-left:6px}
+.ticks{list-style:none;margin:0 0 22px;padding:0}
+.ticks li{position:relative;padding-left:26px;margin:6px 0;font-size:15px;color:#3A3630}
+.ticks li::before{content:"✓";position:absolute;left:0;top:0;color:var(--gold-deep);font-weight:500}
+.opt-label{font-size:11.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:6px 0 10px}
+.buybox .picker{justify-content:flex-start;margin:0 0 20px}
+.buybox .picker button{flex:1 1 0;min-width:0;padding:10px 8px}
+.buybox .bundles{grid-template-columns:1fr;gap:12px;max-width:none;margin:0 0 18px}
+.buybox .bundle{display:grid;grid-template-columns:1fr auto;grid-template-areas:"name price" "qty price" "per save";column-gap:12px;align-items:center;text-align:left;padding:16px 18px 14px}
+.buybox .bundle h3{grid-area:name;margin:0;font-size:22px}.buybox .bundle .qty-note{grid-area:qty;margin:0}.buybox .bundle .per{grid-area:per;margin:4px 0 0}
+.buybox .bundle .price{grid-area:price;font-size:30px;text-align:right}.buybox .bundle .save{grid-area:save;margin:4px 0 0;justify-self:end}
+.buybox .bundle .tag{left:18px;transform:none;top:-10px}
+.buy-btn{width:100%;font-size:14px;padding:20px 24px}
+.buybox .secure{justify-content:flex-start}
+.mix-note{font-size:12.5px;color:var(--muted);margin:10px 0 0}.mix-note[hidden]{display:none}
+.mini-revs{margin-top:22px;border-top:1px solid var(--line);padding-top:16px;display:grid;gap:12px}
+.mini-revs blockquote{margin:0;font-size:14.5px;color:#3A3630;line-height:1.5}
+.mini-revs cite{display:block;font-style:normal;font-size:11.5px;color:var(--muted);margin-top:3px;letter-spacing:.03em}
+.mini-revs cite::before{content:"★★★★★ ";color:var(--gold-deep);letter-spacing:1px}
+.band-btn{margin-top:36px}
+.sticky-cta.away{transform:translateY(110%)}
+.sticky-cta{transition:transform .25s}
+@media (max-width:860px){
+  .pdp{padding:0 0 48px}
+  .pdp-grid{grid-template-columns:1fr;gap:18px}
+  .pdp .container{padding:0}
+  .gallery-wrap{position:static}
+  .gallery{aspect-ratio:6/5}
+  .dots{margin-top:8px}
+  .buybox{padding:0 18px}
+  .buybox h1{font-size:32px;margin:10px 0 6px}
+  .buybox .rating-pill{font-size:12px;padding:5px 10px}
+  .pdp-price{font-size:30px;margin-bottom:10px}
+  .g-note{padding:0 18px;font-size:10.5px;margin-top:4px}
+  /* while the big checkout button is on screen, keep the chat bubble off it */
+  body.buy-visible .oxc:not(.open){opacity:0;pointer-events:none}
+  .oxc{transition:opacity .2s}
+  .ticks li{font-size:14px;margin:4px 0}
+}
+
 /* signature box / in the box */
 .split{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
 .split-img{overflow:hidden;background:var(--stone)}

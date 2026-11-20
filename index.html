@@ -14,8 +14,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=6">
-<link rel="preload" as="image" href="assets/premium/box-black.jpg?v=2">
+<link rel="stylesheet" href="styles.css?v=7">
+<link rel="preload" as="image" href="assets/premium/p4-selfie.jpg">
 <!-- Meta Pixel -->
 <script>
 window.META_PIXEL_ID = "3584146345123169";
@@ -46,23 +46,58 @@ if (window.CLARITY_ID) (function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[
   </div>
 </header>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="container hero-grid">
-    <div>
-      <div class="rating-pill"><span class="stars">★★★★★</span> <b>4.9</b> · 6,500+ verified reviews of this kit</div>
-      <span class="eyebrow">The at-home cluster lash kit</span>
+<!-- HERO = BUY BOX (21.11 CRO: price, style, bundle and checkout above the fold — Clarity showed ~1 in 8 visitors ever reached the old offer section) -->
+<section class="pdp" id="offer">
+  <div class="container pdp-grid">
+    <div class="gallery-wrap">
+      <div class="gallery" id="gallery" tabindex="0" aria-label="Product photos">
+        <figure><img src="assets/premium/p4-selfie.jpg" width="900" height="1608" alt="Woman wearing soft cluster lashes, holding the open Bellewisp box with clusters, Bond and Seal and gold tweezers" loading="eager" fetchpriority="high"></figure>
+        <figure><img src="assets/premium/box-black.jpg?v=2" width="1200" height="1200" alt="What's in the box: a tray of lash clusters, a dual-ended Bond / Seal tube and curved gold tweezers" loading="lazy"></figure>
+        <figure><img src="assets/premium/p5-half.jpg" width="900" height="1608" alt="One eye with lash clusters, one without" loading="lazy"><figcaption>One eye done, one eye not</figcaption></figure>
+        <figure><img src="assets/premium/model-closeup.jpg" width="1200" height="1500" alt="Close-up of soft, wispy cluster lashes" loading="lazy"></figure>
+      </div>
+      <div class="dots" id="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+      <p class="g-note">Lifestyle photos are illustrative and AI-generated. The box and its contents are what you receive.</p>
+    </div>
+    <div class="buybox">
+      <a class="rating-pill" href="#reviews"><span class="stars">★★★★★</span> <b>4.9</b> · 6,500+ verified reviews of this kit</a>
       <h1>Salon lashes, <em>done at home.</em></h1>
-      <p class="lead">Pre-made lash clusters, a 2-in-1 Bond &amp; Seal and precision tweezers, presented in our signature black box. Fuller, softer lashes in minutes, without a salon appointment.</p>
-      <a class="cta-btn" href="#offer">Choose your kit · from $69</a>
-      <div class="cta-sub">Natural, Fluffy or Dramatic · free tracked US shipping · 30-day money-back</div>
-      <div class="trust-row">
-        <span>Wear for days</span>
-        <span>Water-resistant hold</span>
-        <span>30-day guarantee</span>
+      <div class="pdp-price"><span id="pdp-price">$69</span> <small id="pdp-per">1 kit · free tracked US shipping</small></div>
+      <ul class="ticks">
+        <li>Clusters, 2-in-1 Bond &amp; Seal and tweezers, all in one box</li>
+        <li>Buyers report wearing a set for days, through showers and sleep</li>
+        <li>About 10–15 minutes once you've had a little practice</li>
+      </ul>
+      <div class="opt-label">1. Choose your look</div>
+      <div class="picker" id="picker">
+        <button type="button" data-style="30D" class="on">Natural<small>30D · most picked</small></button>
+        <button type="button" data-style="40D">Fluffy<small>40D</small></button>
+        <button type="button" data-style="50D">Dramatic<small>50D</small></button>
+      </div>
+      <div class="opt-label">2. Choose your set</div>
+      <div class="bundles">
+        <div class="bundle selected" data-sku="1kit" role="button" tabindex="0">
+          <h3>1 Kit</h3><p class="qty-note">Try it out</p>
+          <div class="price">$69</div><div class="per">Everything for your salon-look set</div>
+        </div>
+        <div class="bundle" data-sku="2kit" role="button" tabindex="0">
+          <h3>2 Kits</h3><p class="qty-note">Restock included</p>
+          <div class="price">$109</div><div class="per">$54.50 per kit</div><span class="save">Save $29</span>
+        </div>
+        <div class="bundle" data-sku="3kit" role="button" tabindex="0">
+          <span class="tag">BEST VALUE</span>
+          <h3>3 Kits</h3><p class="qty-note">Mix styles or stock up</p>
+          <div class="price">$139</div><div class="per">$46.33 per kit</div><span class="save">Save $68</span>
+        </div>
+      </div>
+      <button class="cta-btn buy-btn" id="checkout-btn" type="button">Secure checkout · $69</button>
+      <div class="secure"><span>PayPal · Apple Pay · Debit or credit card</span><span>Free tracked US shipping</span><span>30-day money-back</span></div>
+      <p class="mix-note" id="mix-note" hidden>Want different styles in your set? Pick them on the confirmation page after checkout.</p>
+      <div class="mini-revs">
+        <blockquote>“The glue is super good!! I wore my lashes for 4 days and even wore them to swim!”<cite>Verified buyer · Fluffy 40D</cite></blockquote>
+        <blockquote>“Love these eyelashes they go on easy and last very well so far!”<cite>Verified buyer · Natural 30D</cite></blockquote>
       </div>
     </div>
-    <a class="hero-img" href="#offer" aria-label="See the kits and prices"><img src="assets/premium/box-black.jpg?v=2" width="1200" height="1200" alt="The Bellewisp kit: open black box with a tray of lash clusters, a Bond and Seal tube and gold tweezers" loading="eager" fetchpriority="high"></a>
   </div>
 </section>
 
@@ -95,10 +130,7 @@ if (window.CLARITY_ID) (function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[
       <div class="step"><b>03</b><h3>Press</h3><p>Gently press the clusters and your lashes together so they hold.</p></div>
       <div class="step"><b>04</b><h3>Seal</h3><p>Finish with the seal end to lock the look in place.</p></div>
     </div>
-    <figure class="how-img">
-      <img src="assets/premium/p3-half.jpg" width="900" height="1609" alt="Close-up selfie: one eye wearing lash clusters, the other without, with the Bellewisp box on the vanity" loading="lazy">
-      <figcaption>One eye with clusters, one without. Illustrative image.</figcaption>
-    </figure>
+    <a class="cta-btn band-btn" href="#offer">Choose your kit · from $69</a>
   </div>
 </section>
 
@@ -135,40 +167,7 @@ if (window.CLARITY_ID) (function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[
     </table>
     </div>
     <p class="note" style="margin-top:14px">Salon and strip-lash prices are typical US ranges and vary by location and brand.</p>
-  </div>
-</section>
-
-<!-- OFFER -->
-<section class="section soft" id="offer">
-  <div class="container center">
-    <span class="eyebrow">Choose your kit</span>
-    <h2>Pick a style, <em>pick a set.</em></h2>
-    <div class="picker" id="picker">
-      <button type="button" data-style="30D" class="on">Natural<small>30D · most popular</small></button>
-      <button type="button" data-style="40D">Fluffy<small>40D</small></button>
-      <button type="button" data-style="50D">Dramatic<small>50D</small></button>
-    </div>
-    <div class="bundles">
-      <div class="bundle selected" data-sku="1kit">
-        <h3>1 Kit</h3><p class="qty-note">Try it out</p>
-        <div class="price">$69</div><div class="per">Everything for your salon-look set</div>
-      </div>
-      <div class="bundle" data-sku="2kit">
-        <span class="tag">MOST POPULAR</span>
-        <h3>2 Kits</h3><p class="qty-note">Restock included</p>
-        <div class="price">$109</div><div class="per">$54.50 per kit</div><span class="save">Save $29</span>
-      </div>
-      <div class="bundle" data-sku="3kit">
-        <span class="tag">BEST VALUE</span>
-        <h3>3 Kits</h3><p class="qty-note">Try every style or stock up</p>
-        <div class="price">$139</div><div class="per">$46.33 per kit</div><span class="save">Save $68</span>
-      </div>
-    </div>
-    <div class="offer-cta">
-      <button class="cta-btn" id="checkout-btn" type="button">Secure checkout</button>
-      <div class="secure"><span>PayPal · Apple Pay · Debit or credit card</span><span>Free tracked shipping</span><span>30-day money-back</span></div>
-      <p class="note" style="margin-top:14px">Ordering 2–3 kits and want different styles? Tell us after checkout — there's a quick style form on the confirmation page.</p>
-    </div>
+    <a class="cta-btn band-btn" href="#offer">Choose your kit · from $69</a>
   </div>
 </section>
 
@@ -255,7 +254,7 @@ if (window.CLARITY_ID) (function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[
   </div>
 </div>
 
-<script src="app.js?v=10"></script>
+<script src="app.js?v=11"></script>
 <script src="chat.js?v=2"></script>
 </body>
 </html>

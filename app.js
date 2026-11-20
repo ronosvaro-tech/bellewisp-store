@@ -21,20 +21,48 @@ const STYLE_NAMES = { "30D": "Natural 30D", "40D": "Fluffy 40D", "50D": "Dramati
 let selectedSku = "1kit";
 let selectedStyle = "30D";
 
+const PER_NOTE = { "1kit": "1 kit · free tracked US shipping", "2kit": "2 kits · $54.50 per kit · free shipping", "3kit": "3 kits · $46.33 per kit · free shipping" };
 function updateSticky() {
   const b = BUNDLES[selectedSku];
   const el = document.getElementById("sticky-price");
   if (el) el.innerHTML = `${b.price} <small>${b.label} · ${STYLE_NAMES[selectedStyle]}</small>`;
+  const pp = document.getElementById("pdp-price"); if (pp) pp.textContent = b.price;
+  const per = document.getElementById("pdp-per"); if (per) per.textContent = PER_NOTE[selectedSku];
+  const cb = document.getElementById("checkout-btn"); if (cb) cb.textContent = "Secure checkout · " + b.price;
+  const mix = document.getElementById("mix-note"); if (mix) mix.hidden = b.kits < 2;
 }
 
+function selectBundle(el) {
+  document.querySelectorAll(".bundle").forEach((b) => b.classList.remove("selected"));
+  el.classList.add("selected");
+  selectedSku = el.dataset.sku;
+  updateSticky();
+}
 document.querySelectorAll(".bundle").forEach((el) => {
-  el.addEventListener("click", () => {
-    document.querySelectorAll(".bundle").forEach((b) => b.classList.remove("selected"));
-    el.classList.add("selected");
-    selectedSku = el.dataset.sku;
-    updateSticky();
-  });
+  el.addEventListener("click", () => selectBundle(el));
+  el.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selectBundle(el); } });
 });
+
+// Photo gallery (swipe on phones): dots follow the visible slide, tap a dot to jump.
+(function () {
+  const g = document.getElementById("gallery"), dots = document.querySelectorAll("#dots i");
+  if (!g || !dots.length) return;
+  const cur = () => Math.round(g.scrollLeft / g.clientWidth);
+  g.addEventListener("scroll", () => { const i = cur(); dots.forEach((d, k) => d.classList.toggle("on", k === i)); }, { passive: true });
+  dots.forEach((d, k) => d.addEventListener("click", () => g.scrollTo({ left: k * g.clientWidth, behavior: "smooth" })));
+  let used = false;
+  g.addEventListener("scroll", () => { if (!used) { used = true; if (window.clarity) clarity("event", "gallery_swipe"); } }, { passive: true, once: true });
+})();
+
+// Bottom bar only when the buy button is off screen (it would just duplicate it).
+(function () {
+  const bar = document.querySelector(".sticky-cta"), btn = document.getElementById("checkout-btn");
+  if (!bar || !btn || !("IntersectionObserver" in window)) return;
+  new IntersectionObserver((es) => {
+    bar.classList.toggle("away", es[0].isIntersecting);
+    document.body.classList.toggle("buy-visible", es[0].isIntersecting);
+  }).observe(btn);
+})();
 document.querySelectorAll("#picker button").forEach((el) => {
   el.addEventListener("click", () => {
     document.querySelectorAll("#picker button").forEach((b) => b.classList.remove("on"));
