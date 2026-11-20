@@ -171,7 +171,7 @@ footer .disc{font-size:12px;color:#A39A8C;margin-top:18px;max-width:760px}
 /* upsell modal */
 .up-bg{position:fixed;inset:0;background:rgba(17,17,17,.6);z-index:300;display:flex;align-items:center;justify-content:center;padding:16px}
 .up-bg[hidden]{display:none}
-.up{position:relative;background:var(--ivory);border-radius:2px;max-width:440px;width:100%;padding:30px 26px 22px;box-shadow:0 30px 80px rgba(0,0,0,.3)}
+.up{position:relative;background:var(--ivory);border-radius:2px;max-width:440px;width:100%;padding:30px 26px 22px;box-shadow:0 30px 80px rgba(0,0,0,.3);max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .up h3{font-size:28px}
 .up p{color:var(--muted);font-size:15px;margin:0 0 18px}
 .up-opt{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;border:1px solid var(--line);background:var(--white);border-radius:2px;padding:14px 16px;margin-bottom:10px;cursor:pointer;font-family:var(--sans);text-align:left;color:var(--ink)}
@@ -179,7 +179,10 @@ footer .disc{font-size:12px;color:#A39A8C;margin-top:18px;max-width:760px}
 .up-opt b{font-family:var(--serif);font-size:20px;font-weight:500}.up-opt small{display:block;color:var(--muted);font-size:12.5px}
 .up-opt .pr{font-family:var(--serif);font-weight:500;font-size:24px}
 .up-no{display:block;width:100%;background:none;border:none;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer;margin-top:6px;font-family:var(--sans);font-size:13px;padding:8px}
-.up-x{position:absolute;top:8px;right:10px;width:36px;height:36px;border:none;background:none;font-size:26px;line-height:1;color:var(--muted);cursor:pointer}
+.up-x{position:absolute;top:4px;right:4px;width:44px;height:44px;border:none;background:none;font-size:30px;line-height:1;color:var(--ink);cursor:pointer}
+.up h3{padding-right:28px}
+/* short screens (Instagram/Facebook in-app browser): keep the whole popup visible */
+@media (max-height:620px){.up{padding:22px 18px 14px}.up h3{font-size:23px}.up p{font-size:13.5px;margin-bottom:12px}.up-opt{padding:10px 12px;margin-bottom:8px}.up-opt b{font-size:18px}.up-opt .pr{font-size:21px}}
 
 /* advertorial */
 .art{max-width:720px;margin:0 auto;padding:44px 24px 80px}
