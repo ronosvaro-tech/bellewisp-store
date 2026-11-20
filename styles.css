@@ -280,3 +280,13 @@ footer .disc{font-size:12px;color:#A39A8C;margin-top:18px;max-width:760px}
   .art h1{font-size:34px}.art h2{font-size:26px}
   .policy h1{font-size:38px}
 }
+
+/* small verified-review toast — bottom-left, never wider than ~260px, never over the chat bubble */
+.proof-toast{position:fixed;left:14px;bottom:20px;z-index:150;width:260px;max-width:calc(100vw - 100px);background:var(--white);border:1px solid var(--line);border-radius:2px;box-shadow:0 10px 30px rgba(17,17,17,.14);padding:10px 30px 10px 12px;animation:proof-in .35s ease}
+@keyframes proof-in{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
+.proof-toast[hidden]{display:none}
+.proof-stars{color:var(--gold);font-size:11px;letter-spacing:.08em}
+.proof-toast p{font-size:12.5px;line-height:1.35;color:var(--ink);margin:3px 0 4px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.proof-who{font-size:10.5px;color:var(--muted);letter-spacing:.02em}
+.proof-close{position:absolute;top:0;right:0;width:32px;height:32px;background:none;border:none;font-size:18px;line-height:1;color:var(--muted);cursor:pointer}
+@media (max-width:860px){.proof-toast{bottom:84px;left:10px;width:236px}}

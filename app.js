@@ -181,6 +181,7 @@ fetch("assets/reviews.json").then((r) => r.json()).then((data) => {
   document.getElementById("rev-avg").textContent = avg.toFixed(1);
   document.getElementById("rev-n").textContent = `${data.length} written reviews shown`;
   render(true);
+  startProofToast(data);
 }).catch(() => {});
 document.getElementById("rev-more").addEventListener("click", () => render(false));
 document.querySelectorAll("#rev-filter button").forEach((b) => {
@@ -189,3 +190,33 @@ document.querySelectorAll("#rev-filter button").forEach((b) => {
     b.classList.add("on"); filter = b.dataset.f; render(true);
   });
 });
+
+// ---- small rotating verified-review toast (same idea as OxiRenew; REAL reviews of this kit only,
+// shown word for word — never invented "X just bought" notifications) ----
+function startProofToast(data) {
+  const toast = document.getElementById("proof-toast");
+  if (!toast) return;
+  let closed = false;
+  try { closed = sessionStorage.getItem("bw_proof_off") === "1"; } catch (_) {}
+  const pool = data.filter((r) => r.s === 5 && r.t && r.t.length >= 25 && r.t.length <= 90 && r.t.indexOf("�") < 0);
+  if (!pool.length || closed) return;
+  for (let k = pool.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [pool[k], pool[j]] = [pool[j], pool[k]]; }
+  let i = 0, hideTimer = null;
+  document.getElementById("proof-close").addEventListener("click", () => {
+    closed = true; toast.hidden = true;
+    try { sessionStorage.setItem("bw_proof_off", "1"); } catch (_) {}
+  });
+  function show() {
+    if (closed || !document.getElementById("upsell").hidden) return; // never over the upsell popup
+    const offer = document.getElementById("offer").getBoundingClientRect();
+    if (offer.top < innerHeight && offer.bottom > 0) return; // never cover the kits / checkout
+    const r = pool[i++ % pool.length];
+    document.getElementById("proof-text").textContent = "“" + r.t + "”";
+    document.getElementById("proof-name").textContent = r.n;
+    toast.hidden = false;
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => { toast.hidden = true; }, 6000);
+  }
+  setTimeout(show, 8000);
+  setInterval(show, 25000);
+}
