@@ -86,10 +86,9 @@ function goCheckout(sku) {
   const icData = { value: b.value, currency: "USD", content_name: sku + " " + selectedStyle, content_ids: [sku], content_type: "product", num_items: b.kits || 1 };
   const eid = "ic_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
   if (window.fbq) fbq("track", "InitiateCheckout", icData, { eventID: eid });
-  // 20.11: the pixel showed 0 InitiateCheckout even with a 400ms delay (Clarity saw the click).
-  // The pixel's own request gets cancelled when the page leaves for PayPal, so also send the
-  // same event (same eventID → Meta deduplicates) with fetch keepalive, which survives navigation.
-  sendPixelKeepalive("InitiateCheckout", icData, eid);
+  // Pixel request needs a moment before the page leaves for PayPal (OxiRenew lesson, 18.11).
+  // Verified 20.11: InitiateCheckout arrives in Events Manager. sendPixelKeepalive() is kept as a
+  // fallback but NOT used, to avoid double-counting (pixel-to-pixel eventID dedup isn't guaranteed).
   if (window.clarity) clarity("event", "checkout_click");
   const btns = document.querySelectorAll("#checkout-btn, #sticky-btn, .up-opt, #up-no");
   btns.forEach((x) => { x.disabled = true; });
